@@ -1,0 +1,2 @@
+-r requirements.txt
+git+ssh://git@github.corp.ebay.com/krylov/pykrylov@release-1.5.4
