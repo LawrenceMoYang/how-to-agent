@@ -1,0 +1,31 @@
+You are provided with the following content:
+
+`{{text}}`
+
+Your task is to generate a list of up to 5 potential user questions and their corresponding answers based on the content. Follow these guidelines:
+
+1. Ensure all questions and answers are derived strictly from the provided content and do not introduce information that is not explicitly present in the content.
+2. Ensure the questions cover a range of topics present in the content.
+3. Include questions with varying levels of complexity, from simple to more detailed.
+4. Make the questions relevant to the main purpose or subject of the content.
+5. Phrase the questions as direct queries that a user might naturally ask.
+6. Do not number the questions or include an index before them.
+7. Focus on creating reasonable, specific questions that a seller might ask if applicable.
+8. If the content does not support generating 5 questions, produce fewer instead.
+9. Provide answers that are directly and accurately derived from the provided content.
+
+### Output Format:
+Your answers should be in JSON format only, following this structure:
+
+[
+    {
+        "question": "Example question?",
+        "answer": "Example answer."
+    },
+    {
+        "question": "Another question?",
+        "answer": "Another answer."
+    }
+]
+
+Do not include any explanations, code fences, or additional text before or after the JSON data.

@@ -1,0 +1,24 @@
+{
+  "_name_or_path": "/mnt/mtrepo/data/cherold/tmp/20231005_embedding_finetuning_unsupervised_single_coclick_hard_negatives_80GPUs/",
+  "architectures": [
+    "LlamaModel"
+  ],
+  "bos_token_id": 0,
+  "eos_token_id": 1,
+  "hidden_act": "silu",
+  "hidden_size": 2048,
+  "initializer_range": 0.02,
+  "intermediate_size": 6144,
+  "max_position_embeddings": 2048,
+  "model_type": "llama",
+  "num_attention_heads": 16,
+  "num_hidden_layers": 16,
+  "pad_token_id": 2,
+  "rms_norm_eps": 1e-06,
+  "tie_word_embeddings": false,
+  "tokenizer_class": "PreTrainedTokenizerFast",
+  "torch_dtype": "float32",
+  "transformers_version": "4.30.2",
+  "use_cache": true,
+  "vocab_size": 65536
+}

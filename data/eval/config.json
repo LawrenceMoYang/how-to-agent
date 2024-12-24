@@ -1,0 +1,25 @@
+{
+    "settings": {
+        "output_path": "../eval"
+    },
+    "exps": {
+        "seller_center": {
+            "document_path": "demos/demo_v0/resources/content/sellercenter_crawled_data.json",
+            "cache_question_emb": false,
+            "variants": [ {
+                    "model_name": "MPNet-V2",
+                    "chunk_size": 384
+                }
+            ]
+        },
+        "help_guides": {
+            "document_path": "demos/demo_v0/resources/content/help_guides_data.json",
+            "cache_question_emb": false,
+            "variants": [ {
+                    "model_name": "MPNet-V2",
+                    "chunk_size": 384
+                }
+            ]
+        }
+    }
+}

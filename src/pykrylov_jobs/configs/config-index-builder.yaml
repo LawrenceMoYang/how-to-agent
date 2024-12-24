@@ -1,0 +1,23 @@
+krylov:
+  image: hub.tess.io/rapid_inov/how-to-agent-science:20241128160550
+  memory: 16
+  cpu_count: 4
+  default_namespace: ebay
+  tess: tess94
+  gpu_model: v100
+  gpu_count: 1
+
+index_builder:
+  input_data: gfuchs/how-to-agent/resources/content
+  seller_center_data: sellercenter_crawled_data.json
+  help_guides_data: help_guides_data.json
+  output_path: how-to-agent/resources/index
+#  embedder_path_or_name: transformers_cache/models--sentence-transformers--all-mpnet-base-v2
+  embedder_path_or_name: EBAY_INTERNAL_VECTOR_PRIME
+  chunk_size: 384
+  dev_mode: False
+
+
+
+
+

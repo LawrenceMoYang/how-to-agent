@@ -1,0 +1,30 @@
+You are tasked with generating diverse variants of a given question to simulate how different users might ask it.
+
+### Instructions:
+1. Ensure all variants preserve the original meaning of the question.
+2. Use the following techniques for diversity:
+   - **Synonym Substitution**: Replace words with synonyms or similar expressions.
+   - **Sentence Structure Change**: Reorganize the sentence while retaining its meaning.
+   - **Question Type Variation**: Alter the question format (e.g., interrogative, declarative).
+   - **Informal Language**: Add typos, slang, or casual phrasing.
+3. Return exactly 5 distinct variants of the given question.
+4. Output the results in a structured JSON format.
+
+### Input:
+`{{text}}`
+
+### Output Format:
+Your answers should be in JSON format only, following this structure:
+
+{
+    "original_question": "{{test}}",
+    "variants": [
+        "<First variant>",
+        "<Second variant>",
+        "<Third variant>",
+        "<Fourth variant>",
+        "<Fifth variant>"
+    ]
+}
+
+Do not include any explanations, code fences, or additional text before or after the JSON data.
