@@ -1,0 +1,22 @@
+apiVersion: apps.tess.io/v1alpha3
+kind: NameService
+metadata:
+  annotations:
+    models.tess.io/cms-requested: 'true'
+    tess.io/change-cause: initial setup
+    applicationinstance.tess.io/name: coreaipx
+  labels:
+    cloud.ebay.com/created-by: genericchart
+    applicationinstance.tess.io/name: coreaipx
+    application.tess.io/name: coreaipx
+  name: howtoagent
+  namespace: coreaipx-dev
+spec:
+  applicationInstanceRef:
+    kind: ApplicationInstance
+    name: coreaipx
+    namespace: coreaipx-dev
+  name: howtoagent-coreaipx.qa.ebay.com
+  nameroute:
+  - target: coreaipx-dev-howtoagent.istio-dev.svc.140.tess.io
+  provider: udns

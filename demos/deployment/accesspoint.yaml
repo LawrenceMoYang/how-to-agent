@@ -1,0 +1,116 @@
+apiVersion: apps.tess.io/v1alpha3
+kind: AccessPoint
+metadata:
+  name: howtoagent
+  namespace: coreaipx-dev
+  annotations:
+    gateway.network.tess.io/cert-provider: protego
+    models.tess.io/cms-requested: 'true'
+    tess.io/change-cause: initial setup
+    
+  labels:
+    cloud.ebay.com/created-by: genericchart
+    applicationinstance.tess.io/name: coreaipx
+    application.tess.io/name: coreaipx
+spec:
+  accessPoints:
+  - name: howtoagent
+    scopeIDs:
+    - "140"
+    scopeType: Cluster
+    traffic:
+      gateways:
+      - apiVersion: networking.istio.io/v1beta1
+        kind: Gateway
+        metadata:
+          annotations:
+            network.tess.io/lbprovider: tlb-ipvs
+            network.tess.io/skip-proxy: "true"
+          name: howtoagent
+        spec:
+          servers:
+          - hosts:
+            - howtoagent-coreaipx.qa.ebay.com
+            - coreaipx-dev-howtoagent.istio-dev.svc.140.tess.io
+            port:
+              name: howtoagent-gw-HTTP
+              number: 80
+              protocol: HTTP
+            tls:
+              httpsRedirect: true
+          - hosts:
+            - howtoagent-coreaipx.qa.ebay.com
+            - coreaipx-dev-howtoagent.istio-dev.svc.140.tess.io
+            port:
+              name: howtoagent-gw-HTTPS
+              number: 443
+              protocol: HTTPS
+      services:
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          annotations:
+            models.tess.io/cms-requested: 'true'
+            
+          labels:
+            environment.tess.io/name: "dev"
+            applicationinstance.tess.io/name: coreaipx
+            application.tess.io/name: coreaipx
+          name: howtoagent
+        spec:
+          ports:
+          - name: port-80
+            port: 80
+            protocol: TCP
+            targetPort: 8501
+          - name: port-443
+            port: 443
+            protocol: TCP
+            targetPort: 8501
+          selector:
+            applicationinstance.tess.io/name: coreaipx
+            application.tess.io/name: coreaipx
+            app.kubernetes.io/name: howtoagent
+          type: ClusterIP
+      virtualServices:
+      - apiVersion: networking.istio.io/v1beta1
+        kind: VirtualService
+        metadata:
+          name: howtoagent
+        spec:
+          gateways:
+          - howtoagent
+          hosts:
+          - howtoagent-coreaipx.qa.ebay.com
+          - coreaipx-dev-howtoagent.istio-dev.svc.140.tess.io
+          http:
+          - headers:
+              request:
+                add:
+                  X-EBAY-CLIENT-IP: '%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%'
+            match:
+            - port: 80
+              uri:
+                prefix: /
+            route:
+            - destination:
+                host: howtoagent
+                port:
+                  number: 80
+          - headers:
+              request:
+                add:
+                  X-EBAY-CLIENT-IP: '%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%'
+            match:
+            - port: 443
+              uri:
+                prefix: /
+            route:
+            - destination:
+                host: howtoagent
+                port:
+                  number: 443
+  applicationInstanceRef:
+    kind: ApplicationInstance
+    name: coreaipx
+    namespace: coreaipx-dev

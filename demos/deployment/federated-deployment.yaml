@@ -1,0 +1,110 @@
+---
+apiVersion: apps.tess.io/v1alpha3
+kind: FederatedDeployment
+metadata:
+  name: howtoagent
+  namespace: coreaipx-dev
+  annotations:
+    tess.io/change-cause: initial setup
+    applicationinstance.tess.io/name: coreaipx
+  labels:
+    cloud.ebay.com/created-by: genericchart
+    applicationinstance.tess.io/name: coreaipx
+    application.tess.io/name: coreaipx
+spec:
+  applicationInstanceRef:
+    kind: ApplicationInstance
+    name: coreaipx
+    namespace: coreaipx-dev
+  deployments:
+  - name: fcp
+    type: Global
+    strategy:
+      base:
+        replicas: 1
+        template:
+          spec:
+            selector:
+              matchLabels:
+                app.kubernetes.io/name: howtoagent
+                applicationinstance.tess.io/name: coreaipx
+                application.tess.io/name: coreaipx
+            strategy:
+              rollingUpdate:
+                maxSurge: 10%
+                maxUnavailable: 10%
+              type: RollingUpdate
+            template:
+              metadata:
+                annotations:
+                  applicationinstance.tess.io/name: coreaipx
+                  io.sherlock.logs/namespace: coreaipx
+                labels:
+                  app.kubernetes.io/name: howtoagent
+                  applicationinstance.tess.io/name: coreaipx
+                  application.tess.io/name: coreaipx
+              spec:
+                volumes:
+                  - name: shared-data
+                    emptyDir: {}
+                affinity:
+                  podAntiAffinity:
+                    preferredDuringSchedulingIgnoredDuringExecution:
+                    - podAffinityTerm:
+                        labelSelector:
+                          matchExpressions:
+                          - key: application.tess.io/name
+                            operator: In
+                            values:
+                            - coreaipx
+                        topologyKey: failure-domain.tess.io/rack
+                      weight: 100
+                serviceAccountName: coreaipx
+                containers:
+                - name: howtoagent
+                  image: "hub.tess.io/rapid_inov/how-to-agent-streamlit:20241126163813"
+                  imagePullPolicy: Always
+                  ports:
+                  - containerPort: 8501
+                    name: "http"
+                    protocol: TCP
+                  resources:
+                    limits:
+                      cpu: "1"
+                      memory: 1Gi
+                    requests:
+                      cpu: "1"
+                      memory: 1Gi
+                  volumeMounts:
+                    - name: shared-data
+                      mountPath: /shared-data
+                  command:
+                  - /bin/sh
+                  - -c
+                  args:
+                  - streamlit run demos/demo_v0/main_app.py --browser.gatherUsageStats=False --server.fileWatcherType=False
+      placement:
+        clusters:
+        - "140"
+      rollout:
+        rollingUpdate:
+          autoPauseUntil: 1
+          maxUnavailable: 1
+        type: RollingUpdate
+      supervisor:
+        tiers:
+        - Global
+        - Cluster
+        type: Global
+  - name: "140"
+    strategy:
+      base:
+        replicas: 1
+      placement: {}
+      supervisor:
+        tiers:
+        - Global
+        - Cluster
+        type: Cluster
+    type: Cluster
+  revisionHistoryLimit: 10
